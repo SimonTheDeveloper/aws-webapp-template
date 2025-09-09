@@ -298,4 +298,22 @@ This template is available as open source under the terms of the [MIT License](L
 
 ---
 
-With these permissions and the trust relationship, your GitHub Actions workflow will be able to deploy infrastructure and push images as needed." 
+## Post-Template Setup
+
+After creating your repository from this template:
+
+### 1. Set Up Branch Protection (Recommended)
+1. Go to **Settings** → **Branches**
+2. Add rule for `main` branch:
+   - ☑️ Require a pull request before merging
+   - ☑️ Require status checks to pass before merging
+   - ☑️ Restrict deletions
+
+### 2. Configure Repository Secrets
+Add these secrets in **Settings** → **Secrets and variables** → **Actions**:
+- `AWS_ACCOUNT_ID`: Your AWS account ID
+- `AWS_REGION`: Your preferred AWS region
+
+---
+
+With these permissions and the trust relationship, your GitHub Actions workflow will be able to deploy infrastructure and push images as needed."
