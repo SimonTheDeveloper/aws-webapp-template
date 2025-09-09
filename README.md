@@ -6,29 +6,29 @@ A full-stack web application template with AWS infrastructure, featuring a React
 ## Features
 
 ### Frontend
-- ⚛️ React application with modern build tools
-- 🎨 Tailwind CSS for styling
-- 📦 Deployed to S3 with CloudFront CDN
-- 🔧 ESLint configuration for code quality
+- React application with modern build tools
+- Tailwind CSS for styling
+- Deployed to S3 with CloudFront CDN
+- ESLint configuration for code quality
 
 ### Backend
-- 🐍 FastAPI Python web framework
-- 🗄️ Database integration ready
-- 🐳 Docker containerization
-- ☁️ Deployed to AWS ECS Fargate
+- FastAPI Python web framework
+- Database integration ready
+- Docker containerization
+- Deployed to AWS ECS Fargate
 
 ### Infrastructure
-- 🏗️ AWS CDK for Infrastructure as Code
-- 🔄 GitHub Actions CI/CD pipeline
-- 🔐 IAM roles with least privilege access
-- 📊 CloudWatch logging and monitoring
-- 🌐 Custom domain support ready
+- AWS CDK for Infrastructure as Code
+- GitHub Actions CI/CD pipeline
+- IAM roles with least privilege access
+- CloudWatch logging and monitoring
+- Custom domain support ready
 
 ### Development Experience
-- 📝 Poetry for Python dependency management
-- 🔄 Hot reload for local development
-- 🧪 Testing setup included
-- 📋 Pre-configured linting and formatting
+- Poetry for Python dependency management
+- Hot reload for local development
+- Testing setup included
+- Pre-configured linting and formatting
 
 ## Getting Started with This Template
 
@@ -305,9 +305,9 @@ After creating your repository from this template:
 ### 1. Set Up Branch Protection (Recommended)
 1. Go to **Settings** → **Branches**
 2. Add rule for `main` branch:
-   - ☑️ Require a pull request before merging
-   - ☑️ Require status checks to pass before merging
-   - ☑️ Restrict deletions
+   - Require a pull request before merging
+   - Require status checks to pass before merging
+   - Restrict deletions
 
 ### 2. Configure Repository Secrets
 Add these secrets in **Settings** → **Secrets and variables** → **Actions**:
