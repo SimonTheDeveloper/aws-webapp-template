@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"name": "AWS WebApp Template",
+			"path": "."
+		},
+		{
+			"name": "GCSE AI Agent",
+			"path": "../GCSE_AI_Agent"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/node_modules": true,
+			"**/.git": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true
+		},
+		"search.exclude": {
+			"**/node_modules": true,
+			"**/bower_components": true,
+			"**/*.code-search": true
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.vscode-typescript-next",
+			"esbenp.prettier-vscode",
+			"ms-python.python",
+			"ms-python.pylint"
+		]
+	}
+}

@@ -1,0 +1,139 @@
+name: CDK Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infrastructure/cdk/**'  # Only trigger deploy if CDK files are changed
+      - '.github/workflows/deploy.yml'  # Trigger if the workflow file is changed
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  deploy:
+    if: github.event_name == 'push' 
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      AWS_REGION: <YOUR_AWS_REGION>  # e.g., us-east-1, eu-west-1
+      DYNAMODB_TABLE_NAME: <YOUR_TABLE_NAME>  # Update with your DynamoDB table name
+      FRONTEND_BUCKET_NAME: <YOUR_BUCKET_NAME>  # Update with your S3 bucket name
+      REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/GitHubActionsECRPushRole
+          aws-region: <YOUR_AWS_REGION>
+          role-session-name: github-actions-session
+
+      - name: Set up Python and Node
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --only main
+          npm install -g aws-cdk
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build React frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Check for CDK changes
+        run: |
+          cdk diff --app "poetry run python3 infrastructure/cdk/app.py" || echo "No changes detected"
+
+      - name: Check CDK stack state
+        run: cdk diff --app "poetry run python3 infrastructure/cdk/app.py"
+
+      - name: Deploy CDK
+        run: |
+          cdk deploy --require-approval never --app "poetry run python3 infrastructure/cdk/app.py"
+
+  destroy:
+    if: github.event_name == 'workflow_dispatch'  # Only run if manually triggered
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      AWS_REGION: <YOUR_AWS_REGION>
+      DYNAMODB_TABLE_NAME: <YOUR_TABLE_NAME>
+      FRONTEND_BUCKET_NAME: <YOUR_BUCKET_NAME>
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/GitHubActionsECRPushRole
+          aws-region: <YOUR_AWS_REGION>
+
+      - name: Set up Python and Node
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install Poetry and Dependencies
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --only main
+
+      - name: Install AWS CDK
+        run: npm install -g aws-cdk
+
+      - name: Destroy CDK stack
+        run: cdk destroy --force --app "poetry run python3 infrastructure/cdk/app.py"
