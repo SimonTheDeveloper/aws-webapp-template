@@ -1,4 +1,9 @@
-"# AWS WebApp Template
+# AWS WebApp Template
+
+![Template](https://img.shields.io/badge/template-use%20this%20template-brightgreen)
+![AWS](https://img.shields.io/badge/AWS-CDK-orange)
+![React](https://img.shields.io/badge/Frontend-React-blue)
+![FastAPI](https://img.shields.io/badge/Backend-FastAPI-green)
 
 ![Template](https://img.shields.io/badge/template-use%20this%20template-brightgreen)
 ![AWS](https://img.shields.io/badge/AWS-CDK-orange)
