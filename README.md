@@ -368,4 +368,4 @@ Add these secrets in **Settings** → **Secrets and variables** → **Actions**:
 
 ---
 
-With these permissions and the trust relationship, your GitHub Actions workflow will be able to deploy infrastructure and push images as needed."
+With these permissions and the trust relationship, your GitHub Actions workflow will be able to deploy infrastructure and push images as needed.
