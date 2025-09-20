@@ -69,9 +69,24 @@ This guide will walk you through everything step by step.
 4. **Click "Create repository from template"**
 
 ### Step 2: Download Your Project
-1. **On your new project page**, click the green "Code" button
-2. **Click "Download ZIP"** to download your project files
-3. **Extract the ZIP file** to a folder on your computer (like your Desktop)
+1. **Copy the repository URL** from your new project page (click the green "Code" button and copy the HTTPS URL)
+2. **Open your terminal/command prompt:**
+   - **On Windows:** Press `Windows key + R`, type `cmd`, press Enter
+   - **On Mac:** Press `Cmd + Space`, type "Terminal", press Enter
+   - **On Linux:** Press `Ctrl + Alt + T`
+3. **Navigate to where you want your project** (like your Desktop):
+   ```sh
+   cd Desktop
+   ```
+4. **Clone your project:**
+   ```sh
+   git clone https://github.com/YOUR-USERNAME/YOUR-PROJECT-NAME.git
+   ```
+   (Replace with your actual GitHub username and project name)
+5. **Enter your project folder:**
+   ```sh
+   cd YOUR-PROJECT-NAME
+   ```
 
 ## Requirements
 
@@ -90,18 +105,9 @@ Before you can run your web application, you need to install some tools on your 
 
 We've created an automated setup script that does most of the work for you:
 
-1. **Open your terminal/command prompt:**
-   - **On Windows:** Press `Windows key + R`, type `cmd`, press Enter
-   - **On Mac:** Press `Cmd + Space`, type "Terminal", press Enter
-   - **On Linux:** Press `Ctrl + Alt + T`
+1. **Make sure you're in your project directory** (you should already be there from Step 2 above)
 
-2. **Navigate to your project folder:**
-   ```sh
-   cd path/to/your/project
-   ```
-   (Replace "path/to/your/project" with the actual location where you extracted your project)
-
-3. **Run the setup script:**
+2. **Run the setup script:**
    ```sh
    ./setup.sh
    ```
