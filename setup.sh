@@ -21,8 +21,29 @@ fi
 # Check if .env file exists
 if [ ! -f ".env" ]; then
     echo "📝 Creating .env file from template..."
-    cp .env.example .env
-    echo "⚠️  Please edit .env file with your AWS credentials before proceeding."
+    if [ -f ".env.example" ]; then
+        cp .env.example .env
+        echo "✅ .env file created successfully!"
+        echo "⚠️  Please edit .env file with your AWS credentials before proceeding."
+        echo "📁 You can verify the file exists with: ls -la .env"
+    else
+        echo "❌ .env.example file not found!"
+        echo "Creating a basic .env file..."
+        cat > .env << EOF
+# AWS Credentials (replace with your actual values)
+AWS_ACCESS_KEY_ID=your_access_key_id
+AWS_SECRET_ACCESS_KEY=your_secret_access_key
+AWS_DEFAULT_REGION=your_default_region
+
+# Optional: Additional environment variables
+# DYNAMODB_TABLE_NAME=your_table_name
+# FRONTEND_BUCKET_NAME=your_bucket_name
+EOF
+        echo "✅ Basic .env file created!"
+        echo "⚠️  Please edit .env file with your AWS credentials before proceeding."
+    fi
+else
+    echo "✅ .env file already exists"
 fi
 
 # Install Poetry if not installed

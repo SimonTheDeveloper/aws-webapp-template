@@ -5,11 +5,6 @@
 ![React](https://img.shields.io/badge/Frontend-React-blue)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-green)
 
-![Template](https://img.shields.io/badge/template-use%20this%20template-brightgreen)
-![AWS](https://img.shields.io/badge/AWS-CDK-orange)
-![React](https://img.shields.io/badge/Frontend-React-blue)
-![FastAPI](https://img.shields.io/badge/Backend-FastAPI-green)
-
 ## Description
 A complete web application template that helps you build and deploy modern web apps to Amazon Web Services (AWS). This template includes everything you need to create a professional web application with a user interface (React) and a backend server (FastAPI) that can handle user requests and store data.
 
@@ -120,21 +115,16 @@ This script will:
 
 ### Option 2: Manual Setup (For Advanced Users)
 
-If you prefer to install everything yourself or the automatic script doesn't work:
+If you prefer to install everything yourself or the automatic script doesn't work, here are the exact same steps the setup script performs:
 
-1. **Install Poetry**  
-   Open a terminal and run:
+1. **Check prerequisites:**
+   Make sure you have Python 3 and Node.js installed:
    ```sh
-   curl -sSL https://install.python-poetry.org | python3 -
+   python3 --version
+   node --version
    ```
 
-2. **Install Python dependencies using Poetry**  
-   ```sh
-   poetry install
-   ```
-
-3. **Create a `.env` file**  
-   Copy the example file and add your AWS credentials:
+2. **Create a `.env` file:**
    ```sh
    cp .env.example .env
    ```
@@ -145,23 +135,43 @@ If you prefer to install everything yourself or the automatic script doesn't wor
    AWS_DEFAULT_REGION=your_default_region
    ```
 
-   > **Tip:** For CI/CD, use GitHub Secrets instead of storing credentials in `.env`.
-
-4. **Install Node.js and AWS CDK CLI**  
-   Ensure you have Node.js 16.x or later and AWS CDK CLI installed:
+3. **Install Poetry (if not already installed):**
    ```sh
-   npm install -g aws-cdk@2.166.0
+   curl -sSL https://install.python-poetry.org | python3 -
+   export PATH="$HOME/.local/bin:$PATH"
    ```
 
-5. **Install frontend dependencies and build the React app**  
+4. **Install Python dependencies:**
    ```sh
-   cd frontend
-   npm install
-   npm run build
+   cd backend
+   poetry install
    cd ..
    ```
 
-6. **Set up your Amazon Web Services (AWS) account:**
+5. **Install Node.js dependencies for the root project:**
+   ```sh
+   npm install
+   ```
+
+6. **Install frontend dependencies:**
+   ```sh
+   cd frontend
+   npm install
+   cd ..
+   ```
+
+7. **Install AWS CDK (if not already installed):**
+   ```sh
+   npm install -g aws-cdk
+   ```
+
+## After Setup (Both Options)
+
+Once you've completed either the automatic or manual setup, you'll need to:
+
+1. **Edit your `.env` file** with your actual AWS credentials
+2. **Update `.github/workflows/deploy.yml`** with your AWS account details
+3. **Set up your Amazon Web Services (AWS) account:**
    
    **What is AWS?** Amazon Web Services is like renting space on Amazon's computers to run your web application, instead of buying your own servers.
    
@@ -170,7 +180,7 @@ If you prefer to install everything yourself or the automatic script doesn't wor
    - Follow the signup process (you'll need a credit card, but we'll use free services)
    - Once logged in, you'll need to find your "Account ID" (a 12-digit number)
    
-7. **Configure AWS on your computer:**
+4. **Configure AWS on your computer:**
    ```sh
    aws configure
    ```
@@ -179,23 +189,17 @@ If you prefer to install everything yourself or the automatic script doesn't wor
    - Your AWS Secret Key (from your AWS account security credentials)  
    - Your preferred region (like `us-east-1` for US East or `eu-west-1` for Europe)
 
-8. **Prepare AWS for your application (this step sets up the foundation):**
+5. **Prepare AWS for your application (this step sets up the foundation):**
    ```sh
    cdk bootstrap aws://YOUR-ACCOUNT-NUMBER/YOUR-REGION
    ```
    Replace `YOUR-ACCOUNT-NUMBER` with your 12-digit AWS account ID and `YOUR-REGION` with your chosen region.
 
-9. **Deploy your application to the cloud:**
+6. **Deploy your application to the cloud:**
    ```sh
    cdk deploy
    ```
    This step uploads your application to AWS and makes it available on the internet. It might take 10-15 minutes the first time.
-
-10. **Test your application locally (optional):**
-    ```sh
-    poetry run uvicorn backend.main:app --reload
-    ```
-    This runs your application on your computer so you can test it before it goes live.
 
 ---
 
