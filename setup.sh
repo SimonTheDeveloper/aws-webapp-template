@@ -34,7 +34,9 @@ fi
 
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
+cd backend
 poetry install
+cd ..
 
 # Install Node.js dependencies for root
 echo "📦 Installing Node.js dependencies..."
