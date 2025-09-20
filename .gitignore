@@ -15,6 +15,9 @@ node_modules/
 # Environment variables
 .env
 
+# VS Code workspace files (personal preference)
+*.code-workspace
+
 .vs
 /infrastructure/cdk/cdk.out/
 cdk.out/

@@ -114,13 +114,6 @@ This script will:
 - Set up your project configuration
 - Give you clear next steps
 
-3. **Add your AWS credentials to the `.env` file:**
-   The setup script creates a `.env` file for you, but you need to edit it with your actual AWS credentials:
-   ```env
-   AWS_ACCESS_KEY_ID=your_actual_access_key_id
-   AWS_SECRET_ACCESS_KEY=your_actual_secret_access_key
-   AWS_DEFAULT_REGION=your_preferred_region
-   ```
 
 ### Option 2: Manual Setup (For Advanced Users)
 
@@ -136,12 +129,6 @@ If you prefer to install everything yourself or the automatic script doesn't wor
 2. **Create a `.env` file:**
    ```sh
    cp .env.example .env
-   ```
-   Then edit `.env` with your actual AWS credentials:
-   ```env
-   AWS_ACCESS_KEY_ID=your_access_key_id
-   AWS_SECRET_ACCESS_KEY=your_secret_access_key
-   AWS_DEFAULT_REGION=your_default_region
    ```
 
 3. **Install Poetry (if not already installed):**
@@ -178,24 +165,49 @@ If you prefer to install everything yourself or the automatic script doesn't wor
 
 Regardless of which setup method you used, you now need to:
 
-1. **Add your AWS credentials to the `.env` file** (if you haven't already):
+1. **Set up your Amazon Web Services (AWS) account:**
+   
+   **What is AWS?** Amazon Web Services is like renting space on Amazon's computers to run your web application, instead of buying your own servers.
+   
+   **Steps:**
+   - Go to <a href="https://aws.amazon.com" target="_blank">aws.amazon.com</a> and click "Create an AWS Account"
+   - Follow the signup process (you'll need a credit card, but we'll use free services)
+   - Once logged in, you'll need to find your "Account ID" (a 12-digit number)
+   
+   **Important: Set up proper permissions**
+   - If you're the account owner: You already have all necessary permissions
+   - If you're using an IAM user (sub-account): Your user needs specific permissions (see options below)
+   
+   **Permission Options (choose one):**
+   
+   **Option A: Minimal Permissions (Recommended for production)**
+   Attach these AWS managed policies to your IAM user:
+   - `CloudFormationFullAccess` - Create and manage infrastructure stacks
+   - `IAMFullAccess` - Create roles and policies for your app
+   - `AmazonS3FullAccess` - Store CDK assets and host frontend
+   - `AmazonECS_FullAccess` - Run containerized backend
+   - `AmazonDynamoDBFullAccess` - Database access
+   - `CloudWatchLogsFullAccess` - Application logging
+   - `AmazonEC2FullAccess` - Networking and load balancers
+   
+   **Option B: Simple Setup (For development/learning only)**
+   - `AdministratorAccess` - Full access to everything (⚠️ Not recommended for production)
+   
+   **Create access keys:**
+   - Go to IAM → Users → Your User → Security credentials
+   - Click "Create access key" → Choose "Command Line Interface (CLI)"
+   - Download and save your access key ID and secret access key
+
+2. **Add your AWS credentials to the `.env` file:**
+   Now that you have your AWS account and access keys, edit the `.env` file:
    ```env
    AWS_ACCESS_KEY_ID=your_actual_access_key_id
    AWS_SECRET_ACCESS_KEY=your_actual_secret_access_key
    AWS_DEFAULT_REGION=your_preferred_region
    ```
 
-2. **Update `.github/workflows/deploy.yml`** with your AWS account details (replace the `<YOUR_*>` placeholders)
+3. **Update `.github/workflows/deploy.yml`** with your AWS account details (replace the `<YOUR_*>` placeholders)
 
-3. **Set up your Amazon Web Services (AWS) account:**
-   
-   **What is AWS?** Amazon Web Services is like renting space on Amazon's computers to run your web application, instead of buying your own servers.
-   
-   **Steps:**
-   - Go to [aws.amazon.com](https://aws.amazon.com) and click "Create an AWS Account"
-   - Follow the signup process (you'll need a credit card, but we'll use free services)
-   - Once logged in, you'll need to find your "Account ID" (a 12-digit number)
-   
 4. **Configure AWS on your computer:**
    ```sh
    aws configure
@@ -205,17 +217,47 @@ Regardless of which setup method you used, you now need to:
    - Your AWS Secret Key (from your AWS account security credentials)  
    - Your preferred region (like `us-east-1` for US East or `eu-west-1` for Europe)
 
-5. **Prepare AWS for your application (this step sets up the foundation):**
+5. **Install backend dependencies (needed for infrastructure deployment):**
    ```sh
+   cd backend
+   poetry install
+   cd ..
+   ```
+
+6. **Prepare AWS for your application (this step sets up the foundation):**
+   ```sh
+   cd infrastructure/cdk
    cdk bootstrap aws://YOUR-ACCOUNT-NUMBER/YOUR-REGION
    ```
    Replace `YOUR-ACCOUNT-NUMBER` with your 12-digit AWS account ID and `YOUR-REGION` with your chosen region.
+   
+   **If you get a "User is not authorized" error:**
+   This means your AWS user doesn't have sufficient permissions. You need:
+   - CloudFormation permissions (to create stacks)
+   - S3 permissions (for CDK assets)
+   - IAM permissions (to create roles)
+   
+   **Recommended fix:** Attach the minimal required policies to your IAM user:
+   - Go to AWS Console → IAM → Users → Your User
+   - Click "Permissions" tab → "Add permissions" → "Attach policies directly"
+   - Add these policies one by one:
+     - `CloudFormationFullAccess`
+     - `IAMFullAccess`
+     - `AmazonS3FullAccess`
+     - `AmazonECS_FullAccess`
+     - `AmazonDynamoDBFullAccess`
+     - `CloudWatchLogsFullAccess`
+     - `AmazonEC2FullAccess`
+   
+   **Quick but less secure alternative:** Use `AdministratorAccess` (only for development/learning)
 
-6. **Deploy your application to the cloud:**
+7. **Deploy your application to the cloud:**
    ```sh
    cdk deploy
    ```
    This step uploads your application to AWS and makes it available on the internet. It might take 10-15 minutes the first time.
+   
+   **Note:** Make sure you're still in the `infrastructure/cdk` directory when running this command.
 
 ---
 

@@ -7,6 +7,9 @@
 		{
 			"name": "GCSE AI Agent",
 			"path": "../GCSE_AI_Agent"
+		},
+		{
+			"path": "../kamia-fitness"
 		}
 	],
 	"settings": {
