@@ -110,8 +110,17 @@ We've created an automated setup script that does most of the work for you:
 This script will:
 - Check if you have the required tools installed
 - Install missing tools automatically
+- Create a `.env` file from the template (you'll need to add your AWS credentials)
 - Set up your project configuration
 - Give you clear next steps
+
+3. **Add your AWS credentials to the `.env` file:**
+   The setup script creates a `.env` file for you, but you need to edit it with your actual AWS credentials:
+   ```env
+   AWS_ACCESS_KEY_ID=your_actual_access_key_id
+   AWS_SECRET_ACCESS_KEY=your_actual_secret_access_key
+   AWS_DEFAULT_REGION=your_preferred_region
+   ```
 
 ### Option 2: Manual Setup (For Advanced Users)
 
@@ -167,10 +176,17 @@ If you prefer to install everything yourself or the automatic script doesn't wor
 
 ## After Setup (Both Options)
 
-Once you've completed either the automatic or manual setup, you'll need to:
+Regardless of which setup method you used, you now need to:
 
-1. **Edit your `.env` file** with your actual AWS credentials
-2. **Update `.github/workflows/deploy.yml`** with your AWS account details
+1. **Add your AWS credentials to the `.env` file** (if you haven't already):
+   ```env
+   AWS_ACCESS_KEY_ID=your_actual_access_key_id
+   AWS_SECRET_ACCESS_KEY=your_actual_secret_access_key
+   AWS_DEFAULT_REGION=your_preferred_region
+   ```
+
+2. **Update `.github/workflows/deploy.yml`** with your AWS account details (replace the `<YOUR_*>` placeholders)
+
 3. **Set up your Amazon Web Services (AWS) account:**
    
    **What is AWS?** Amazon Web Services is like renting space on Amazon's computers to run your web application, instead of buying your own servers.
